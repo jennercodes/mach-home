@@ -99,6 +99,10 @@ async function getCountryCode(
 
 /**
  * Middleware to handle region selection and onboarding status.
+ *
+ * The country code never appears in the visible URL: clean paths (e.g. /store)
+ * are rewritten internally to /{countryCode}/store, and legacy prefixed URLs
+ * (e.g. /pe/store) are permanently redirected to their clean version.
  */
 export async function middleware(request: NextRequest) {
   if (request.nextUrl.pathname.includes(".")) {
@@ -112,28 +116,31 @@ export async function middleware(request: NextRequest) {
   const countryCode = await getCountryCode(request, regionMap)
 
   // if the country code is available, use it, otherwise use the default region
-  const country = countryCode || DEFAULT_REGION
-  const firstPathSegment = request.nextUrl.pathname.split("/")[1]?.toLowerCase()
-  const urlHasCountry = firstPathSegment === country.toLowerCase()
+  const country = (countryCode || DEFAULT_REGION).toLowerCase()
+  const pathname = request.nextUrl.pathname
+  const firstPathSegment = pathname.split("/")[1]?.toLowerCase()
 
-  if (urlHasCountry) {
-    if (!cacheIdCookie) {
-      const response = NextResponse.next()
-      response.cookies.set("_medusa_cache_id", cacheId, {
-        maxAge: 60 * 60 * 24,
-      })
-      return response
-    }
-    return NextResponse.next()
+  // legacy URLs with a country prefix → redirect to the clean path
+  if (firstPathSegment && regionMap.has(firstPathSegment)) {
+    const cleanPath = pathname.slice(firstPathSegment.length + 1) || "/"
+    const queryString = request.nextUrl.search || ""
+    return NextResponse.redirect(
+      `${request.nextUrl.origin}${cleanPath}${queryString}`,
+      308
+    )
   }
 
-  // if the url doesn't have the country, redirect to it
-  const redirectPath =
-    request.nextUrl.pathname === "/" ? "" : request.nextUrl.pathname
-  const queryString = request.nextUrl.search || ""
-  const redirectUrl = `${request.nextUrl.origin}/${country}${redirectPath}${queryString}`
+  // serve the clean URL from the [countryCode] route tree
+  const rewriteUrl = request.nextUrl.clone()
+  rewriteUrl.pathname = `/${country}${pathname === "/" ? "" : pathname}`
 
-  return NextResponse.redirect(redirectUrl, 307)
+  const response = NextResponse.rewrite(rewriteUrl)
+  if (!cacheIdCookie) {
+    response.cookies.set("_medusa_cache_id", cacheId, {
+      maxAge: 60 * 60 * 24,
+    })
+  }
+  return response
 }
 
 export const config = {
