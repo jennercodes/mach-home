@@ -5,6 +5,10 @@ import { getRegion, listRegions } from "@lib/data/regions"
 import ProductTemplate from "@modules/products/templates"
 import { HttpTypes } from "@medusajs/types"
 
+// Rendered on demand: the data layer reads the cache-id cookie, which is
+// incompatible with static generation (would throw DYNAMIC_SERVER_USAGE).
+export const dynamic = "force-dynamic"
+
 type Props = {
   params: Promise<{ countryCode: string; handle: string }>
   searchParams: Promise<{ v_id?: string }>

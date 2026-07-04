@@ -5,6 +5,10 @@ import ContentPageTemplate from "@modules/content/templates"
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
+// Rendered on demand: the data layer reads the cache-id cookie, which is
+// incompatible with static generation (would throw DYNAMIC_SERVER_USAGE).
+export const dynamic = "force-dynamic"
+
 type Props = {
   params: Promise<{ countryCode: string; slug: string }>
 }
