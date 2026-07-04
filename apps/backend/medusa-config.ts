@@ -15,6 +15,9 @@ module.exports = defineConfig({
   },
   modules: [
     {
+      resolve: "./src/modules/cms",
+    },
+    {
       resolve: "@medusajs/medusa/file",
       options: {
         providers: [
