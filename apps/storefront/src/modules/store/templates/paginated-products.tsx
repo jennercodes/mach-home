@@ -12,6 +12,7 @@ type PaginatedProductsParams = {
   category_id?: string[]
   id?: string[]
   order?: string
+  fields?: string
 }
 
 export default async function PaginatedProducts({
@@ -31,6 +32,9 @@ export default async function PaginatedProducts({
 }) {
   const queryParams: PaginatedProductsParams = {
     limit: 12,
+    // extended fields so ProductPreview can show category eyebrow + color dots
+    fields:
+      "*variants.calculated_price,+variants.inventory_quantity,+metadata,*categories,*options,*options.values",
   }
 
   if (collectionId) {
@@ -69,7 +73,7 @@ export default async function PaginatedProducts({
   return (
     <>
       <ul
-        className="grid grid-cols-2 w-full small:grid-cols-3 medium:grid-cols-4 gap-x-6 gap-y-8"
+        className="grid grid-cols-2 w-full small:grid-cols-3 medium:grid-cols-4 gap-x-4 gap-y-8 small:gap-x-6 small:gap-y-10"
         data-testid="products-list"
       >
         {products.map((p) => {

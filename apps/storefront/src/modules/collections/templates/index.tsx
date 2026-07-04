@@ -1,10 +1,11 @@
 import { Suspense } from "react"
 
+import { HttpTypes } from "@medusajs/types"
 import SkeletonProductGrid from "@modules/skeletons/templates/skeleton-product-grid"
-import RefinementList from "@modules/store/components/refinement-list"
+import ListingHero from "@modules/store/components/listing-hero"
+import ListingToolbar from "@modules/store/components/listing-toolbar"
 import { SortOptions } from "@modules/store/components/refinement-list/sort-products"
 import PaginatedProducts from "@modules/store/templates/paginated-products"
-import { HttpTypes } from "@medusajs/types"
 
 export default function CollectionTemplate({
   sortBy,
@@ -21,12 +22,17 @@ export default function CollectionTemplate({
   const sort = sortBy || "created_at"
 
   return (
-    <div className="flex flex-col small:flex-row small:items-start py-6 content-container">
-      <RefinementList sortBy={sort} />
-      <div className="w-full">
-        <div className="mb-8 text-2xl-semi">
-          <h1>{collection.title}</h1>
-        </div>
+    <div>
+      <ListingHero
+        title={collection.title}
+        breadcrumbs={[
+          { label: "Inicio", href: "/" },
+          { label: "Tienda", href: "/store" },
+          { label: collection.title },
+        ]}
+      />
+      <ListingToolbar sortBy={sort} />
+      <div className="max-w-[1440px] mx-auto px-6 small:px-10 py-10">
         <Suspense
           fallback={
             <SkeletonProductGrid
