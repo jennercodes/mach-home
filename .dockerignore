@@ -1,0 +1,34 @@
+# Keep the Docker build context small and free of host artifacts/secrets.
+**/node_modules
+**/.next
+**/.medusa
+**/dist
+**/build
+**/out
+**/coverage
+**/*.tsbuildinfo
+
+.git
+.github
+.idea
+.vscode
+.turbo
+**/.turbo
+
+# Secrets — env is injected at runtime, never baked into the image
+**/.env
+**/.env.local
+**/.env.*.local
+
+# Local-only data & transient exports
+apps/backend/merge-backup-*.json
+apps/backend/static
+*-dump.sql
+templates
+
+# Docker / docs themselves don't belong in the context
+Dockerfile
+**/Dockerfile
+docker-compose*.yml
+DEPLOYMENT.md
+**/.DS_Store
