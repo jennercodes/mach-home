@@ -1,5 +1,5 @@
+import { PDP } from "@lib/config/brand"
 import { HttpTypes } from "@medusajs/types"
-import { Heading, Text } from "@modules/common/components/ui"
 import LocalizedClientLink from "@modules/common/components/localized-client-link"
 
 type ProductInfoProps = {
@@ -7,32 +7,41 @@ type ProductInfoProps = {
 }
 
 const ProductInfo = ({ product }: ProductInfoProps) => {
+  const category = product.categories?.[0]
+
   return (
-    <div id="product-info">
-      <div className="flex flex-col gap-y-4 lg:max-w-[500px] mx-auto">
-        {product.collection && (
+    <div id="product-info" className="mb-6">
+      {category ? (
+        <LocalizedClientLink
+          href={`/categories/${category.handle}`}
+          className="inline-block text-[11px] tracking-[0.25em] uppercase text-sand font-medium mb-4 hover:text-ink transition-colors"
+        >
+          {category.name}
+        </LocalizedClientLink>
+      ) : (
+        product.collection && (
           <LocalizedClientLink
             href={`/collections/${product.collection.handle}`}
-            className="text-medium text-ui-fg-muted hover:text-ui-fg-subtle"
+            className="inline-block text-[11px] tracking-[0.25em] uppercase text-sand font-medium mb-4 hover:text-ink transition-colors"
           >
             {product.collection.title}
           </LocalizedClientLink>
-        )}
-        <Heading
-          level="h2"
-          className="text-3xl leading-10 text-ui-fg-base"
-          data-testid="product-title"
-        >
-          {product.title}
-        </Heading>
-
-        <Text
-          className="text-medium text-ui-fg-subtle whitespace-pre-line"
-          data-testid="product-description"
-        >
-          {product.description}
-        </Text>
-      </div>
+        )
+      )}
+      <h1
+        className="font-display text-4xl small:text-[44px] font-light leading-[1.05] tracking-[-0.02em] mb-5"
+        data-testid="product-title"
+      >
+        {product.title}
+      </h1>
+      {product.variants?.length === 1 && product.variants[0].title && (
+        <div className="flex items-center gap-2 mb-4 text-xs tracking-[0.15em] uppercase">
+          <span className="font-semibold">Tamaño</span>
+          <span className="text-ink-soft">{product.variants[0].title}</span>
+        </div>
+      )}
+      <p className="text-[13px] text-sand font-light">{PDP.shippingNote}</p>
+      <div className="h-px bg-line mt-6" />
     </div>
   )
 }

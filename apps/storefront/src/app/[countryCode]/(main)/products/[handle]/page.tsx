@@ -1,5 +1,5 @@
 import { Metadata } from "next"
-import { notFound } from "next/navigation"
+import { notFound, redirect } from "next/navigation"
 import { listProducts } from "@lib/data/products"
 import { getRegion, listRegions } from "@lib/data/regions"
 import ProductTemplate from "@modules/products/templates"
@@ -52,6 +52,10 @@ export async function generateStaticParams() {
   }
 }
 
+/** Old per-size URLs (…-1-5plz-…, …-queen-…) point to the merged product. */
+const legacySizeHandle = (handle: string) =>
+  handle.replace(/-(1-5plz|2plz|1plz|queen|king)/, "")
+
 function getImagesForVariant(
   product: HttpTypes.StoreProduct,
   selectedVariantId?: string
@@ -84,14 +88,18 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }).then(({ response }) => response.products[0])
 
   if (!product) {
+    const legacyHandle = legacySizeHandle(handle)
+    if (legacyHandle !== handle) {
+      redirect(`/products/${legacyHandle}`)
+    }
     notFound()
   }
 
   return {
-    title: `${product.title} | Medusa Store`,
+    title: `${product.title} | MACH HOME`,
     description: `${product.title}`,
     openGraph: {
-      title: `${product.title} | Medusa Store`,
+      title: `${product.title} | MACH HOME`,
       description: `${product.title}`,
       images: product.thumbnail ? [product.thumbnail] : [],
     },
@@ -111,14 +119,22 @@ export default async function ProductPage(props: Props) {
 
   const pricedProduct = await listProducts({
     countryCode: params.countryCode,
-    queryParams: { handle: params.handle },
+    queryParams: {
+      handle: params.handle,
+      fields:
+        "*variants.calculated_price,+variants.inventory_quantity,*variants.images,+metadata,+tags,*categories,*options,*options.values,*images",
+    },
   }).then(({ response }) => response.products[0])
 
-  const images = getImagesForVariant(pricedProduct, selectedVariantId)
-
   if (!pricedProduct) {
+    const legacyHandle = legacySizeHandle(params.handle)
+    if (legacyHandle !== params.handle) {
+      redirect(`/products/${legacyHandle}`)
+    }
     notFound()
   }
+
+  const images = getImagesForVariant(pricedProduct, selectedVariantId)
 
   return (
     <ProductTemplate

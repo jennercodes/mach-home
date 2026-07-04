@@ -55,7 +55,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
   return (
     <>
       <div
-        className={clx("lg:hidden inset-x-0 bottom-0 fixed z-50", {
+        className={clx("lg:hidden inset-x-0 bottom-0 fixed z-40", {
           "pointer-events-none": !show,
         })}
       >
@@ -111,7 +111,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                   <span>
                     {variant
                       ? Object.values(options).join(" / ")
-                      : "Select Options"}
+                      : "Elige opciones"}
                   </span>
                   <ChevronDown />
                 </div>
@@ -124,10 +124,10 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                 data-testid="mobile-cart-button"
               >
                 {!variant
-                  ? "Select variant"
+                  ? "Elige una opción"
                   : !inStock
-                  ? "Out of stock"
-                  : "Add to cart"}
+                  ? "Agotado"
+                  : "Agregar al carrito"}
               </Button>
             </div>
           </div>

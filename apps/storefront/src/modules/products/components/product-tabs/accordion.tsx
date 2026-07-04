@@ -47,21 +47,19 @@ const Item: React.FC<AccordionItemProps> = ({
     <AccordionPrimitive.Item
       {...props}
       className={clx(
-        "border-grey-20 group border-t last:mb-0 last:border-b",
+        "border-line group border-t last:mb-0 last:border-b",
         "py-3",
         className
       )}
     >
       <AccordionPrimitive.Header className="px-1">
         <div className="flex flex-col">
-          <div className="flex w-full items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Text className="text-ui-fg-subtle text-sm">{title}</Text>
-            </div>
-            <AccordionPrimitive.Trigger>
-              {customTrigger || <MorphingTrigger />}
-            </AccordionPrimitive.Trigger>
-          </div>
+          <AccordionPrimitive.Trigger className="flex w-full items-center justify-between cursor-pointer">
+            <span className="text-[13px] tracking-[0.15em] uppercase font-semibold">
+              {title}
+            </span>
+            {customTrigger || <MorphingTrigger />}
+          </AccordionPrimitive.Trigger>
           {subtitle && (
             <Text as="span" className="mt-1 text-sm">
               {subtitle}

@@ -1,38 +1,69 @@
+"use client"
+
 import { HttpTypes } from "@medusajs/types"
-import { Container } from "@modules/common/components/ui"
+import { clx } from "@modules/common/components/ui"
 import Image from "next/image"
+import { useEffect, useState } from "react"
 
 type ImageGalleryProps = {
   images: HttpTypes.StoreProductImage[]
 }
 
+/** PDP gallery: vertical thumbnails + main 4/5 image (thumbs move below on mobile). */
 const ImageGallery = ({ images }: ImageGalleryProps) => {
+  const [activeIndex, setActiveIndex] = useState(0)
+
+  // Variant change can swap the image list — keep the index in range.
+  useEffect(() => {
+    setActiveIndex(0)
+  }, [images])
+
+  const activeImage = images[activeIndex] ?? images[0]
+
+  if (!images.length) {
+    return <div className="aspect-[4/5] w-full bg-cream" />
+  }
+
   return (
-    <div className="flex items-start relative">
-      <div className="flex flex-col flex-1 small:mx-16 gap-y-4">
-        {images.map((image, index) => {
-          return (
-            <Container
-              key={image.id}
-              className="relative aspect-[29/34] w-full overflow-hidden bg-ui-bg-subtle"
-              id={image.id}
-            >
-              {!!image.url && (
-                <Image
-                  src={image.url}
-                  priority={index <= 2 ? true : false}
-                  className="absolute inset-0 rounded-rounded"
-                  alt={`Product image ${index + 1}`}
-                  fill
-                  sizes="(max-width: 576px) 280px, (max-width: 768px) 360px, (max-width: 992px) 480px, 800px"
-                  style={{
-                    objectFit: "cover",
-                  }}
-                />
-              )}
-            </Container>
-          )
-        })}
+    <div className="flex flex-col small:grid small:grid-cols-[80px_1fr] gap-4">
+      <div className="order-2 small:order-none flex small:flex-col gap-3 overflow-x-auto no-scrollbar">
+        {images.map((image, index) => (
+          <button
+            key={image.id}
+            type="button"
+            onClick={() => setActiveIndex(index)}
+            className={clx(
+              "relative aspect-square w-16 small:w-full shrink-0 overflow-hidden border transition-colors",
+              index === activeIndex
+                ? "border-ink"
+                : "border-line hover:border-ink"
+            )}
+            aria-label={`Ver imagen ${index + 1}`}
+          >
+            {!!image.url && (
+              <Image
+                src={image.url}
+                alt=""
+                fill
+                sizes="80px"
+                className="object-cover"
+              />
+            )}
+          </button>
+        ))}
+      </div>
+
+      <div className="relative aspect-[4/5] w-full overflow-hidden bg-cream">
+        {!!activeImage?.url && (
+          <Image
+            src={activeImage.url}
+            priority
+            alt="Imagen del producto"
+            fill
+            sizes="(max-width: 1024px) 100vw, 800px"
+            className="object-cover"
+          />
+        )}
       </div>
     </div>
   )
