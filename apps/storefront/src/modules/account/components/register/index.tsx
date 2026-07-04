@@ -20,24 +20,24 @@ const Register = ({ setCurrentView }: Props) => {
       className="max-w-sm flex flex-col items-center"
       data-testid="register-page"
     >
-      <h1 className="text-large-semi uppercase mb-6">
-        Become a Medusa Store Member
+      <div className="eyebrow text-sand mb-3">Mi cuenta</div>
+      <h1 className="font-display text-4xl font-light tracking-[-0.02em] mb-4 text-center">
+        Crea tu cuenta
       </h1>
-      <p className="text-center text-base-regular text-ui-fg-base mb-4">
-        Create your Medusa Store Member profile, and get access to an enhanced
-        shopping experience.
+      <p className="text-center text-sm text-ink-soft font-light mb-6">
+        Crea tu perfil MACH HOME y accede a una mejor experiencia de compra.
       </p>
       <form className="w-full flex flex-col" action={formAction}>
         <div className="flex flex-col w-full gap-y-2">
           <Input
-            label="First name"
+            label="Nombres"
             name="first_name"
             required
             autoComplete="given-name"
             data-testid="first-name-input"
           />
           <Input
-            label="Last name"
+            label="Apellidos"
             name="last_name"
             required
             autoComplete="family-name"
@@ -52,14 +52,14 @@ const Register = ({ setCurrentView }: Props) => {
             data-testid="email-input"
           />
           <Input
-            label="Phone"
+            label="Celular"
             name="phone"
             type="tel"
             autoComplete="tel"
             data-testid="phone-input"
           />
           <Input
-            label="Password"
+            label="Contraseña"
             name="password"
             required
             type="password"
@@ -68,34 +68,34 @@ const Register = ({ setCurrentView }: Props) => {
           />
         </div>
         <ErrorMessage error={message} data-testid="register-error" />
-        <span className="text-center text-ui-fg-base text-small-regular mt-6">
-          By creating an account, you agree to Medusa Store&apos;s{" "}
+        <span className="text-center text-ink-soft text-[13px] font-light mt-6">
+          Al crear una cuenta aceptas la{" "}
           <LocalizedClientLink
             href="/content/privacy-policy"
-            className="underline"
+            className="underline underline-offset-4 text-ink"
           >
-            Privacy Policy
+            Política de privacidad
           </LocalizedClientLink>{" "}
-          and{" "}
+          y los{" "}
           <LocalizedClientLink
             href="/content/terms-of-use"
-            className="underline"
+            className="underline underline-offset-4 text-ink"
           >
-            Terms of Use
-          </LocalizedClientLink>
-          .
+            Términos y condiciones
+          </LocalizedClientLink>{" "}
+          de MACH HOME.
         </span>
         <SubmitButton className="w-full mt-6" data-testid="register-button">
-          Join
+          Crear cuenta
         </SubmitButton>
       </form>
-      <span className="text-center text-ui-fg-base text-small-regular mt-6">
-        Already a member?{" "}
+      <span className="text-center text-ink-soft text-[13px] font-light mt-6">
+        ¿Ya tienes cuenta?{" "}
         <button
           onClick={() => setCurrentView(LOGIN_VIEW.SIGN_IN)}
-          className="underline"
+          className="underline underline-offset-4 text-ink"
         >
-          Sign in
+          Inicia sesión
         </button>
         .
       </span>

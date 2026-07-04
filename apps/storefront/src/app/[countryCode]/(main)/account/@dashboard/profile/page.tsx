@@ -9,8 +9,8 @@ import { listRegions } from "@lib/data/regions"
 import { retrieveCustomer } from "@lib/data/customer"
 
 export const metadata: Metadata = {
-  title: "Profile",
-  description: "View and edit your Medusa Store profile.",
+  title: "Perfil | MACH HOME",
+  description: "Revisa y actualiza tu perfil MACH HOME.",
 }
 
 export default async function Profile() {
@@ -24,11 +24,10 @@ export default async function Profile() {
   return (
     <div className="w-full" data-testid="profile-page-wrapper">
       <div className="mb-8 flex flex-col gap-y-4">
-        <h1 className="text-2xl-semi">Profile</h1>
-        <p className="text-base-regular">
-          View and update your profile information, including your name, email,
-          and phone number. You can also update your billing address, or change
-          your password.
+        <h1 className="font-display text-3xl font-light tracking-[-0.02em]">Perfil</h1>
+        <p className="text-sm text-ink-soft font-light">
+          Revisa y actualiza tu información: nombre, email y celular. También
+          puedes actualizar tu dirección de facturación.
         </p>
       </div>
       <div className="flex flex-col gap-y-8 w-full">
@@ -47,5 +46,5 @@ export default async function Profile() {
 }
 
 const Divider = () => {
-  return <div className="w-full h-px bg-gray-200" />
+  return <div className="w-full h-px bg-line" />
 }
