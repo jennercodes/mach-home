@@ -260,7 +260,9 @@ export default async function mergeSizeProducts({ container }: ExecArgs) {
     })
     const missing = items.filter(
       (item) =>
-        !item.location_levels?.some((l: Member) => l.location_id === location.id)
+        !item.location_levels?.some(
+          (l: any) => l?.location_id === location.id
+        )
     )
     if (missing.length) {
       await createInventoryLevelsWorkflow(container).run({
