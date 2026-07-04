@@ -4,8 +4,16 @@ import Medusa, { FetchArgs, FetchInput } from "@medusajs/js-sdk"
 // Defaults to standard port for Medusa server
 let MEDUSA_BACKEND_URL = "http://localhost:9000"
 
+// Browser + default: the public backend URL, inlined into the bundle at build.
 if (process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL) {
   MEDUSA_BACKEND_URL = process.env.NEXT_PUBLIC_MEDUSA_BACKEND_URL
+}
+
+// Server-side only: prefer an internal URL (e.g. the docker service name) so
+// SSR reaches the backend directly instead of hairpinning through the public
+// domain. Read at runtime and stripped from the client bundle.
+if (typeof window === "undefined" && process.env.MEDUSA_BACKEND_URL) {
+  MEDUSA_BACKEND_URL = process.env.MEDUSA_BACKEND_URL
 }
 
 export const sdk = new Medusa({
