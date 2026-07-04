@@ -55,6 +55,13 @@ yarn-error.log*
 # One-off admin exports (transient, not source data)
 templates/*-product-exports-*.csv
 
+# Database dumps (may contain customer data / secrets)
+*-dump.sql
+*.dump
+
+# Production env for docker-compose (copied from .env.production.template)
+/.env
+
 # macOS system files
 .DS_Store
 .DS_Store?
