@@ -121,4 +121,38 @@ Coolify consume el `docker-compose.yml` directo:
 - **Imágenes.** En R2 (cloud). No se migran. Verificar que `S3_*` apunten al mismo bucket para que las URLs existentes resuelvan.
 - **Admin user.** Viene en el dump. Para crear uno nuevo:
   `docker compose exec backend npx medusa user -e admin@mach-home.com -p <password>`
-- **Backups.** Programar `pg_dump` periódico del volumen `pgdata`. R2 ya es durable.
+- **Backups.** El servicio `backup` sube un `pg_dump` diario a R2 (ver sección abajo).
+
+---
+
+## Backups automáticos (servicio `backup`)
+
+El servicio `backup` hace un `pg_dump` (cliente PG18) comprimido y lo sube a un
+bucket **privado** de R2, cada `BACKUP_INTERVAL_SECONDS` (24h por defecto). Se
+deshabilita solo (idlea) si `BACKUP_S3_BUCKET` está vacío, así que en local no
+molesta.
+
+**Setup (una vez):**
+
+1. En Cloudflare R2 crea un bucket **privado** — p. ej. `machhome-backups`.
+   NO uses el bucket de imágenes (es público; los dumps tienen data sensible).
+2. Asegura que tu token de R2 (`S3_ACCESS_KEY_ID`/`SECRET`) tenga acceso de
+   escritura a ese bucket (o crea un token nuevo con scope a ese bucket).
+3. En el env: `BACKUP_S3_BUCKET=machhome-backups` (opcional `BACKUP_S3_PREFIX`,
+   `BACKUP_INTERVAL_SECONDS`). Redeploy.
+4. **Retención:** en R2, agrega una *lifecycle rule* al bucket para borrar
+   objetos con más de N días (p. ej. 14). Así no crecen indefinidamente.
+
+Los dumps quedan en `s3://machhome-backups/postgres/medusa-YYYYMMDD-HHMMSS.sql.gz`.
+
+**Restaurar un backup:**
+
+```bash
+# baja el .sql.gz de R2, luego:
+gunzip -c medusa-20260705-030000.sql.gz \
+  | docker compose exec -T postgres psql -U "$POSTGRES_USER" -d "$POSTGRES_DB"
+```
+
+El dump usa `--clean --if-exists`, así que se puede restaurar sobre una DB
+existente. Para restaurar en limpio: `docker compose up -d postgres`, restaura,
+y luego `docker compose up -d` (backend/storefront).
