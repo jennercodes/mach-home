@@ -112,6 +112,7 @@ Coolify consume el `docker-compose.yml` directo:
 
 - **`NEXT_PUBLIC_*` = build-time.** Cambiar el dominio de la API o la key obliga a **rebuild** del storefront, no basta reiniciar.
 - **Dos URLs del backend.** El browser usa `NEXT_PUBLIC_MEDUSA_BACKEND_URL` (público, horneado). El SSR del contenedor usa `MEDUSA_BACKEND_URL` (interno, `http://backend:9000` por defecto) — así no da hairpin por el dominio público. En local, esto evita que el SSR falle contra `localhost:9000`.
+- **Puertos.** `docker-compose.yml` NO publica puertos al host (usa `expose:`); el proxy de Coolify enruta los dominios por la red interna y así se evita `port is already allocated`. El desarrollo local sí los publica vía `docker-compose.override.yml` (auto-mergeado por `docker compose up`).
 - **Redis en prod.** `medusa-config.ts` ahora activa event-bus / cache / workflow-engine / locking sobre Redis **cuando `REDIS_URL` está seteado** (el compose lo hace). En local sin Redis se mantiene el modo in-memory — no requiere nada extra.
 - **Migraciones.** El backend corre `medusa db:migrate` al arrancar (incluye las tablas del módulo CMS). Idempotente. Para multi-instancia, moverlo a un job de release en vez de cada boot.
 - **SSL de Postgres.** Medusa intenta SSL en producción. El Postgres self-host (compose/DBngin) no lo tiene → `DATABASE_SSL=false` (default). Solo `true` para DBs gestionadas (Neon/RDS/Supabase). Sin esto el backend crashea con `server does not support SSL connections`.

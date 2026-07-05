@@ -1,0 +1,11 @@
+# Local development only. `docker compose up` (without -f) auto-merges this over
+# docker-compose.yml, publishing the app ports so you can reach them on
+# localhost. Coolify/CI run with an explicit `-f docker-compose.yml` and ignore
+# this file, so no host ports are bound there (the proxy routes the domains).
+services:
+  backend:
+    ports:
+      - "9000:9000"
+  storefront:
+    ports:
+      - "8000:8000"
