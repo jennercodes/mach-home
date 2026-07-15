@@ -98,17 +98,17 @@ const MobileActions: React.FC<MobileActionsProps> = ({
                 <div></div>
               )}
             </div>
-            <div className={clx("grid grid-cols-2 w-full gap-x-4", {
+            <div className={clx("grid grid-cols-[7rem_1fr] w-full gap-x-3", {
               "!grid-cols-1": isSimple
             })}>
               {!isSimple && <Button
                 onClick={open}
                 variant="secondary"
-                className="w-full"
+                className="w-full min-w-0 px-3"
                 data-testid="mobile-actions-button"
               >
-                <div className="flex items-center justify-between w-full">
-                  <span>
+                <div className="flex items-center justify-between w-full min-w-0 gap-x-1">
+                  <span className="truncate">
                     {variant
                       ? Object.values(options).join(" / ")
                       : "Elige opciones"}
@@ -119,7 +119,7 @@ const MobileActions: React.FC<MobileActionsProps> = ({
               <Button
                 onClick={handleAddToCart}
                 disabled={!inStock || !variant}
-                className="w-full"
+                className="w-full whitespace-nowrap px-3"
                 isLoading={isAdding}
                 data-testid="mobile-cart-button"
               >

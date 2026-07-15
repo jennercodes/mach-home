@@ -27,7 +27,7 @@ const SummaryItems = ({ cart }: { cart: HttpTypes.StoreCart }) => {
               size="full"
               className="!rounded-none !p-0 !shadow-none !aspect-[4/5] !bg-white"
             />
-            <span className="absolute -top-1.5 -right-1.5 w-[22px] h-[22px] bg-ink text-cream rounded-full text-[11px] font-semibold flex items-center justify-center">
+            <span className="absolute top-1 right-1 w-[22px] h-[22px] bg-ink text-cream rounded-full text-[11px] font-semibold flex items-center justify-center">
               {item.quantity}
             </span>
           </div>
