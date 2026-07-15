@@ -94,9 +94,9 @@ const Addresses = ({
           <div className="text-small-regular">
             {cart && cart.shipping_address ? (
               <div className="flex items-start gap-x-8">
-                <div className="flex items-start gap-x-1 w-full">
+                <div className="grid grid-cols-1 small:grid-cols-3 gap-x-8 gap-y-6 w-full">
                   <div
-                    className="flex flex-col w-1/3"
+                    className="flex flex-col"
                     data-testid="shipping-address-summary"
                   >
                     <Text className="txt-medium-plus text-ui-fg-base mb-1">
@@ -120,11 +120,11 @@ const Addresses = ({
                   </div>
 
                   <div
-                    className="flex flex-col w-1/3 "
+                    className="flex flex-col"
                     data-testid="shipping-contact-summary"
                   >
                     <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                      Contact
+                      Contacto
                     </Text>
                     <Text className="txt-medium text-ui-fg-subtle">
                       {cart.shipping_address.phone}
@@ -135,16 +135,16 @@ const Addresses = ({
                   </div>
 
                   <div
-                    className="flex flex-col w-1/3"
+                    className="flex flex-col"
                     data-testid="billing-address-summary"
                   >
                     <Text className="txt-medium-plus text-ui-fg-base mb-1">
-                      Billing Address
+                      Dirección de facturación
                     </Text>
 
                     {sameAsBilling ? (
                       <Text className="txt-medium text-ui-fg-subtle">
-                        Billing and delivery address are the same.
+                        La dirección de facturación y de envío son la misma.
                       </Text>
                     ) : (
                       <>
