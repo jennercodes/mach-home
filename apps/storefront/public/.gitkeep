@@ -1,0 +1,4 @@
+# Keep this directory tracked in git even when empty.
+# apps/storefront/Dockerfile does 'COPY .../public' unconditionally; without
+# a tracked file here, a clean clone (Coolify --no-cache) has no public/ dir
+# and the build fails with '"/app/apps/storefront/public": not found'.
