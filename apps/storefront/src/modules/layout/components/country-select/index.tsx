@@ -11,7 +11,7 @@ import { Fragment, useEffect, useMemo, useState } from "react"
 import ReactCountryFlag from "react-country-flag"
 
 import { StateType } from "@lib/hooks/use-toggle-state"
-import { usePathname } from "next/navigation"
+import { useParams, usePathname } from "next/navigation"
 import { updateRegion } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 
@@ -29,6 +29,9 @@ type CountrySelectProps = {
 const CountrySelect = ({ toggleState, regions }: CountrySelectProps) => {
   const [current, setCurrent] = useState<CountryOption | undefined>(undefined)
 
+  // Clean URLs drop the country prefix, but middleware rewrites to the
+  // [countryCode] tree so useParams() still resolves the active country.
+  const countryCode = useParams().countryCode as string
   const currentPath = usePathname()
 
   const { state, close } = toggleState
