@@ -1,6 +1,6 @@
 "use client"
 
-import { isManual, isStripeLike } from "@lib/constants"
+import { isCulqi, isManual, isStripeLike } from "@lib/constants"
 import { placeOrder } from "@lib/data/cart"
 import { HttpTypes } from "@medusajs/types"
 import { Button } from "@modules/common/components/ui"
@@ -39,6 +39,8 @@ const PaymentButton: React.FC<PaymentButtonProps> = ({
       return (
         <ManualTestPaymentButton notReady={notReady} data-testid={dataTestId} />
       )
+    case isCulqi(paymentSession?.provider_id):
+      return <CulqiPaymentButton notReady={notReady} data-testid={dataTestId} />
     default:
       return <Button disabled>Select a payment method</Button>
   }
@@ -185,6 +187,50 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
       <ErrorMessage
         error={errorMessage}
         data-testid="manual-payment-error-message"
+      />
+    </>
+  )
+}
+
+const CulqiPaymentButton = ({
+  notReady,
+  "data-testid": dataTestId,
+}: {
+  notReady: boolean
+  "data-testid"?: string
+}) => {
+  const [submitting, setSubmitting] = useState(false)
+  const [errorMessage, setErrorMessage] = useState<string | null>(null)
+
+  // The Culqi token was already captured on the payment step and stored on the
+  // payment session, so placing the order triggers the server-side charge.
+  const handlePayment = async () => {
+    setSubmitting(true)
+    setErrorMessage(null)
+
+    await placeOrder()
+      .catch((err) => {
+        setErrorMessage(err.message)
+      })
+      .finally(() => {
+        setSubmitting(false)
+      })
+  }
+
+  return (
+    <>
+      <Button
+        disabled={notReady}
+        isLoading={submitting}
+        onClick={handlePayment}
+        size="large"
+        data-testid={dataTestId}
+      >
+        Realizar pedido
+      </Button>
+      <ErrorMessage
+        error={errorMessage}
+        data-testid="culqi-payment-error-message"
       />
     </>
   )

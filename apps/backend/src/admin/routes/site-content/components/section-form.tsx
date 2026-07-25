@@ -1,5 +1,13 @@
 import { ArrowUpTray } from "@medusajs/icons"
-import { Button, Input, Label, Text, Textarea, toast } from "@medusajs/ui"
+import {
+  Button,
+  Input,
+  Label,
+  Switch,
+  Text,
+  Textarea,
+  toast,
+} from "@medusajs/ui"
 import { useRef, useState } from "react"
 import { sdk } from "../../../lib/sdk"
 import { FieldSpec, SectionSpec } from "../specs"
@@ -113,6 +121,15 @@ const FieldControl = ({
     case "image":
       return (
         <ImageField value={(raw as string | null) ?? ""} onChange={onChange} />
+      )
+    case "toggle":
+      return (
+        <div className="pt-1">
+          <Switch
+            checked={raw === true}
+            onCheckedChange={(checked) => onChange(checked)}
+          />
+        </div>
       )
   }
 }

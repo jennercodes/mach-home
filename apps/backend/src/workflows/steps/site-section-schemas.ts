@@ -54,6 +54,14 @@ export const SITE_SECTION_SCHEMAS: Record<string, z.ZodTypeAny> = {
     newsletterText: z.string(),
     payments: z.array(z.string()),
   }),
+  whatsapp: z.object({
+    enabled: z.boolean(),
+    // International format, digits only (e.g. "51987654321"). The storefront
+    // strips non-digits, so "+51 987 654 321" is also accepted here.
+    phone: z.string(),
+    message: z.string(),
+    tooltip: z.string(),
+  }),
 }
 
 export const SITE_SECTION_KEYS = Object.keys(SITE_SECTION_SCHEMAS)

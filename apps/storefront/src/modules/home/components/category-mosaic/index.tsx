@@ -24,7 +24,7 @@ const CategoryMosaic = ({
         href="/store"
         linkLabel="Ver todo"
       />
-      <div className="grid grid-cols-2 gap-4 small:grid-cols-[2fr_1fr_1fr] small:grid-rows-2 small:h-[700px]">
+      <div className="grid grid-cols-1 gap-4 small:grid-cols-[2fr_1fr_1fr] small:grid-rows-2 small:h-[700px]">
         {categories.slice(0, 5).map((category, i) => (
           <CategoryCard key={category.id} category={category} featured={i === 0} />
         ))}

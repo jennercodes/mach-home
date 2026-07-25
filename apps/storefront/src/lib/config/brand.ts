@@ -127,6 +127,16 @@ export const FOOTER = {
   payments: ["CULQI", "IZIPAY"],
 }
 
+// Floating WhatsApp button. Managed from the admin (Contenido del sitio →
+// WhatsApp); this is the fallback used when the backend is unreachable.
+// `phone` empty ⇒ button hidden until a number is set in the admin.
+export const WHATSAPP = {
+  enabled: true,
+  phone: "",
+  message: "Hola 👋 Quiero más información sobre los productos de MACH HOME.",
+  tooltip: "¿Necesitas ayuda?",
+}
+
 export const PDP = {
   shippingNote: "Envío gratis en Lima · Llega entre 2 y 4 días hábiles",
   features: [

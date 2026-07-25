@@ -4,8 +4,9 @@ export type FieldSpec = {
   /**
    * text: input · textarea: multiline · image: URL + upload
    * lines: string[] one per line · csv: string[] comma separated
+   * toggle: boolean on/off switch
    */
-  type: "text" | "textarea" | "image" | "lines" | "csv"
+  type: "text" | "textarea" | "image" | "lines" | "csv" | "toggle"
   hint?: string
 }
 
@@ -120,6 +121,36 @@ export const SECTION_SPECS: SectionSpec[] = [
         name: "payments",
         label: "Medios de pago (separados por coma)",
         type: "csv",
+      },
+    ],
+  },
+  {
+    key: "whatsapp",
+    label: "Botón de WhatsApp",
+    description: "Botón flotante de WhatsApp en todas las páginas de la tienda",
+    fields: [
+      {
+        name: "enabled",
+        label: "Mostrar botón",
+        type: "toggle",
+      },
+      {
+        name: "phone",
+        label: "Número de WhatsApp",
+        type: "text",
+        hint: "Formato internacional sin +, ej. 51987654321",
+      },
+      {
+        name: "message",
+        label: "Mensaje pre-cargado",
+        type: "textarea",
+        hint: "Texto con el que se abre el chat",
+      },
+      {
+        name: "tooltip",
+        label: "Texto de la burbuja",
+        type: "text",
+        hint: "Etiqueta corta junto al botón (opcional)",
       },
     ],
   },

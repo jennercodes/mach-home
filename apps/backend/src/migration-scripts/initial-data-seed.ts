@@ -108,7 +108,7 @@ export default async function initial_data_seed({
           name: "Perú",
           currency_code: "pen",
           countries: ["pe"],
-          payment_providers: ["pp_system_default"],
+          payment_providers: ["pp_system_default", "pp_culqi_culqi"],
         },
       ],
     },

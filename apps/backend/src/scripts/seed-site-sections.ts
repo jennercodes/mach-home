@@ -73,6 +73,14 @@ const SECTIONS: Record<string, Record<string, unknown>> = {
     newsletterText: "Recibe -10% en tu primera compra y novedades de la marca.",
     payments: ["CULQI", "IZIPAY"],
   },
+  whatsapp: {
+    enabled: true,
+    // Set the real number from the admin (Contenido del sitio → WhatsApp).
+    // Empty on purpose: the button stays hidden until a number is configured.
+    phone: "",
+    message: "Hola 👋 Quiero más información sobre los productos de MACH HOME.",
+    tooltip: "¿Necesitas ayuda?",
+  },
 }
 
 export default async function seedSiteSections({ container }: ExecArgs) {
