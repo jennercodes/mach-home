@@ -45,6 +45,31 @@ const modules: any[] = [
       ],
     },
   },
+  // Payment: Culqi (Peru) alongside Medusa's built-in "system" manual provider.
+  // The provider id becomes `pp_culqi_culqi`. The secret key is server-side
+  // only; the storefront tokenizes cards with the public key (Checkout Custom).
+  //
+  // The provider is only registered when CULQI_SECRET_KEY is set: it validates
+  // the key on load, so registering it without a key would abort the entire
+  // backend boot. With no key we still get the built-in "system" provider.
+  {
+    resolve: "@medusajs/medusa/payment",
+    options: {
+      providers: process.env.CULQI_SECRET_KEY
+        ? [
+            {
+              resolve: "./src/modules/culqi",
+              id: "culqi",
+              options: {
+                secretKey: process.env.CULQI_SECRET_KEY,
+                // Capture the charge immediately when the order is placed.
+                capture: true,
+              },
+            },
+          ]
+        : [],
+    },
+  },
 ]
 
 // In production Medusa must not use the in-memory event bus / cache / workflow

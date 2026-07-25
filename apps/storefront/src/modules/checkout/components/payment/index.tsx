@@ -1,6 +1,7 @@
 "use client"
 import { RadioGroup } from "@headlessui/react"
-import { isStripeLike, paymentInfoMap } from "@lib/constants"
+import { isCulqi, isStripeLike, paymentInfoMap } from "@lib/constants"
+import { openCulqiCheckout } from "@lib/culqi"
 import { initiatePaymentSession } from "@lib/data/cart"
 import { CheckCircleSolid, CreditCard } from "@medusajs/icons"
 import ErrorMessage from "@modules/checkout/components/error-message"
@@ -77,9 +78,43 @@ const Payment = ({
     })
   }
 
+  const goToReview = () =>
+    router.push(pathname + "?" + createQueryString("step", "review"), {
+      scroll: false,
+    })
+
+  const handleCulqiCheckout = async () => {
+    const publicKey = process.env.NEXT_PUBLIC_CULQI_PUBLIC_KEY
+    if (!publicKey) {
+      throw new Error("Falta configurar la llave pública de Culqi.")
+    }
+
+    // Tokenize the card/Yape in the Culqi modal, then persist the token on the
+    // payment session so the backend can charge it when the order is placed.
+    const tokenId = await openCulqiCheckout({
+      publicKey,
+      amountCents: Math.round((cart.total ?? 0) * 100),
+      currency: cart.currency_code ?? "pen",
+      email: cart.email ?? "",
+      title: "MACH HOME",
+    })
+
+    await initiatePaymentSession(cart, {
+      provider_id: selectedPaymentMethod,
+      data: { culqi_token: tokenId, email: cart.email },
+    })
+
+    goToReview()
+  }
+
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
+      if (isCulqi(selectedPaymentMethod)) {
+        await handleCulqiCheckout()
+        return
+      }
+
       const shouldInputCard =
         isStripeLike(selectedPaymentMethod) && !activeSession
 
@@ -93,12 +128,7 @@ const Payment = ({
       }
 
       if (!shouldInputCard) {
-        return router.push(
-          pathname + "?" + createQueryString("step", "review"),
-          {
-            scroll: false,
-          }
-        )
+        return goToReview()
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : String(err))
@@ -201,9 +231,11 @@ const Payment = ({
             }
             data-testid="submit-payment-button"
           >
-            {!activeSession && isStripeLike(selectedPaymentMethod)
-              ? " Enter card details"
-              : "Continuar a revisión"}
+            {isCulqi(selectedPaymentMethod)
+              ? "Pagar con tarjeta o Yape"
+              : !activeSession && isStripeLike(selectedPaymentMethod)
+                ? " Enter card details"
+                : "Continuar a revisión"}
           </Button>
         </div>
 
