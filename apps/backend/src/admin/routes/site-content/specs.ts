@@ -62,7 +62,15 @@ export const SECTION_SPECS: SectionSpec[] = [
     key: "hero",
     label: "Home · Hero",
     description: "Portada principal del home",
-    fields: heroFields,
+    fields: [
+      ...heroFields,
+      {
+        name: "imageMobile",
+        label: "Imagen móvil",
+        type: "image",
+        hint: "Opcional. Vertical (ej. 1080×1600). Si está vacía se usa la imagen principal",
+      },
+    ],
   },
   {
     key: "marquee",
