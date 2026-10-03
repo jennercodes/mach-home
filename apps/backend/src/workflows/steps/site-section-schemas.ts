@@ -21,6 +21,7 @@ export const SITE_SECTION_SCHEMAS: Record<string, z.ZodTypeAny> = {
     cta: z.string(),
     href: z.string(),
     image: z.string(),
+    imageMobile: z.string().nullable().optional(),
   }),
   marquee: z.object({
     items: z.array(z.string().min(1)).min(1),

@@ -16,7 +16,17 @@ export const MARQUEE_ITEMS = [
   "Calidad que dura",
 ]
 
-export const HERO = {
+export const HERO: {
+  eyebrow: string
+  titleStart: string
+  titleEm: string
+  titleEnd: string
+  text: string
+  cta: string
+  href: string
+  image: string
+  imageMobile?: string | null
+} = {
   eyebrow: "Nueva colección · Otoño 2026",
   titleStart: "El descanso que sí ",
   titleEm: "se siente",

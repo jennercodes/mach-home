@@ -26,6 +26,7 @@ const SECTIONS: Record<string, Record<string, unknown>> = {
     href: "/store",
     image:
       "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=1800&q=85",
+    imageMobile: null,
   },
   marquee: {
     items: [
